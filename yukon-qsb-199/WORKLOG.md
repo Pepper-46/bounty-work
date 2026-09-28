@@ -44,3 +44,14 @@ New official evidence:
 - PR #2204 is queued testing the previous CPU co-grinder engine plus a 48 MiB persisting table window.
 
 Decision: do not spend a Yukon evaluation on the failed #2187 mechanism family. Prefer mechanisms with completed positive official evidence; wait for #2201/#2202/#2204 results before freezing a composition. Static analysis can continue without credentials, but an official Pepper-46 submission still requires the user's Yukon participant authorization.
+
+
+## 2026-09-28 19:31 ART — evidence update and submission target
+
+The three queued experiments from the prior audit (#2201 Karatsuba, #2202 SHA+host+IFMA-square, #2204 old co-grinder+48MiB) were all cancelled by their submitters before producing a ranked score. They are not usable as positive performance evidence.
+
+A materially stronger completed result is now public: PR #2282 / Yukon submission `189982bf-33ba-4478-aa6c-2e21c7349527` tested the promoted `8d07d3e` pinning tree plus **only** h0ng95's interleaved SHA-256 tail schedule. It verified successfully at **1,012,807,365/s**, versus the promoted **1,008,206,828/s** (+0.4563%). It missed the 1% promotion gate, whose floor remains **1,018,288,897/s**, by only **5,481,532/s (~0.541%)**. This is currently the cleanest positive one-variable donor found in the public ranked queue.
+
+Decision: freeze the next Pepper-46 candidate around the exact #2282 SHA-tail donor rather than Karatsuba or the regressing host bundles. The remaining research objective is one orthogonal mechanism with credible >=0.55% upside on top of that donor. Do not import the prior split-host-fold/four-slot package: a later public combination carrying those host changes scored 951,587,955/s and is explicit negative evidence.
+
+Submission remains blocked only at the official evaluation step by Pepper-46's Yukon participant authorization/API session. No secret should be committed or pasted into chat.
