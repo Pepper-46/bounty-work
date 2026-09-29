@@ -55,3 +55,14 @@ A materially stronger completed result is now public: PR #2282 / Yukon submissio
 Decision: freeze the next Pepper-46 candidate around the exact #2282 SHA-tail donor rather than Karatsuba or the regressing host bundles. The remaining research objective is one orthogonal mechanism with credible >=0.55% upside on top of that donor. Do not import the prior split-host-fold/four-slot package: a later public combination carrying those host changes scored 951,587,955/s and is explicit negative evidence.
 
 Submission remains blocked only at the official evaluation step by Pepper-46's Yukon participant authorization/API session. No secret should be committed or pasted into chat.
+
+
+## 2026-09-28 22:11 ART — ranked evidence correction
+
+PR #2275 (Subset SM phase-skew) completed on the official RTX 4090 at **706,353,266/s**, below the promoted **708,411,009/s**. Do not reuse the phase-skew mechanism.
+
+Pinning PR #2281 (weighted inverse before output stores) completed at **990,246,114/s** versus **1,008,206,828/s**. Exclude it.
+
+The strongest completed clean donor remains PR #2282 at **1,012,807,365/s**. It is verified and positive but still **5,481,532/s** short of the 1% promotion floor **1,018,288,897/s**. Candidate selection remains: start from #2282 and require an orthogonal mechanism with credible >=0.541% upside.
+
+Added `promotion_math.py` so future scores can be checked deterministically against the live bips gate. Example: `python3 promotion_math.py 1008206828 1012807365`.
