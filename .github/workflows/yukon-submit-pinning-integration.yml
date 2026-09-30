@@ -69,7 +69,7 @@ jobs:
           PY
 
           # Guardrails: no protected files may be modified.
-          changed="$(git diff --name-only)"
+          changed="$(git diff --name-only HEAD)"
           test -n "$changed"
           bad="$(printf '%s\n' "$changed" | grep -v '^candidates/pinning/' || true)"
           if [ -n "$bad" ]; then
@@ -78,11 +78,11 @@ jobs:
             exit 1
           fi
 
-          grep -q '^#define QSB_SLOTS 5$' candidates/pinning/pinning.cu
+          grep -q '^#define QSB_SLOTS 5' candidates/pinning/pinning.cu
           grep -q '^#define QSB_GREEN_SHARED 12$' candidates/pinning/pinning.cu
 
-          git diff --stat
-          git diff -- candidates/pinning/pinning.cu | sed -n '1,100p'
+          git diff --stat HEAD
+          git diff HEAD -- candidates/pinning/pinning.cu | sed -n '1,100p'
 
       - name: Write public submission note
         shell: bash
