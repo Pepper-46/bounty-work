@@ -77,3 +77,13 @@ Added `promotion_math.py` so future scores can be checked deterministically agai
 
 ### Action
 Do not freeze a new candidate until #2546/#2553 or #2551 returns an official result. If either clears or comes within a small deterministic gap, use its public source/provenance as the next donor and add only a non-overlapping mechanism. Current evidence still does not justify claiming a >=1% deterministic improvement.
+
+
+## Queue update — 2026-09-30 02:37 ART
+- PR #2546 (13-part stack) was dispatched and then cancelled before a benchmark result. Retry PR #2553 remains queued, so there is no official evidence yet for its modeled +0.406% stack.
+- PR #2551 (u25 union: tail schedule interleave + parity-window split accumulators + finish IV fold + register-root scratch vectorization) has been dispatched as workflow run #36672535071 and is queued. This is the highest-information near-term result because it tests four independent device scheduling deltas.
+- PR #2554 remains a redraw of the 1,015.94M/s c5a62fc4 tree; its note estimates true GPU work near 1,005.87M/s and only a few-percent chance of clearing the gate by sampling luck. Do not spend our evaluation on a redraw.
+- PR #2555's 32 MiB hot-bank-prefix layout remains structurally interesting, but its submitter reports the matched local result as neutral.
+
+### Execution decision
+Wait for the already-dispatched #2551 benchmark rather than freeze a redundant candidate. If #2551 is positive, use its public source as a measured donor and compare its mechanism set against #2282/c5a62fc4 to identify a non-overlapping composition. If neutral or negative, retire those four scheduling deltas from the shortlist.
