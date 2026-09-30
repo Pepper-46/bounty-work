@@ -66,3 +66,14 @@ Pinning PR #2281 (weighted inverse before output stores) completed at **990,246,
 The strongest completed clean donor remains PR #2282 at **1,012,807,365/s**. It is verified and positive but still **5,481,532/s** short of the 1% promotion floor **1,018,288,897/s**. Candidate selection remains: start from #2282 and require an orthogonal mechanism with credible >=0.541% upside.
 
 Added `promotion_math.py` so future scores can be checked deterministically against the live bips gate. Example: `python3 promotion_math.py 1008206828 1012807365`.
+
+
+## Queue update — 2026-09-30 02:21 ART
+- Live Pinning frontier remains 1,008,206,828/s; promotion floor 1,018,288,897/s.
+- PR #2554 reports the strongest recent measured public tree I found: cefika c5a62fc4 at 1,015.94M/s, with luck-free GPU work 1,005.87M/s. It is still below the promotion line and is being redrawn; do not clone it blindly.
+- PR #2555 tests a genuinely distinct 32 MiB hot-bank-prefix table layout, but its submitter reports matched local work as neutral. Watch official result before composing.
+- PR #2551 is a union of tail schedule interleave, parity-window split accumulators, finish IV fold, and register-root scratch vectorization. It is potentially orthogonal but currently lacks official score in the public note; watch rather than spend an evaluation blindly.
+- PR #2546/#2553 stacks 13 public mechanisms on the record, including T5V direct plan, f03a package, c17 uniform package, SHA/FIN LEA, state-drop-early, CPU co-grinder, green-shared and register-root variants. This is the most important pending integration result because it directly tests whether public small deltas compose enough to cross the gate.
+
+### Action
+Do not freeze a new candidate until #2546/#2553 or #2551 returns an official result. If either clears or comes within a small deterministic gap, use its public source/provenance as the next donor and add only a non-overlapping mechanism. Current evidence still does not justify claiming a >=1% deterministic improvement.
