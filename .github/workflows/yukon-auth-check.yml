@@ -1,0 +1,45 @@
+name: Yukon auth check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/yukon-auth-check.yml"
+  workflow_dispatch:
+
+jobs:
+  auth-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      YUKON_API_TOKEN: ${{ secrets.YUKON_API_TOKEN }}
+    steps:
+      - name: Verify secret is present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "${YUKON_API_TOKEN:-}"
+
+      - name: Install Yukon CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://api.yukon.org/yukon/install.sh -o /tmp/yukon-install.sh
+          sh /tmp/yukon-install.sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Disable optional telemetry and traces
+        shell: bash
+        run: |
+          set -euo pipefail
+          yukon trace off
+          yukon config --telemetry disabled
+
+      - name: Verify authenticated Yukon access without exposing data
+        shell: bash
+        run: |
+          set -euo pipefail
+          yukon submissions --json >/tmp/yukon-submissions.json
+          test -s /tmp/yukon-submissions.json
+          echo "Yukon authentication check succeeded."
