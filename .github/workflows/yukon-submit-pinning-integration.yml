@@ -48,6 +48,8 @@ jobs:
           set -euo pipefail
 
           # Strong completed donor: cefika c5a62fc4, official 1,015,939,991/s.
+          # Yukon clone is shallow, so fetch the evaluated donor commit explicitly.
+          git fetch --no-tags --depth=1 origin a8b340ed0ece879eb5d9b1ca9301196cf5558b63
           # Restore only the permitted pinning surface from its evaluated source.
           git checkout a8b340ed0ece879eb5d9b1ca9301196cf5558b63 -- candidates/pinning
 
@@ -142,6 +144,41 @@ jobs:
           Public evidence is mixed and the official ranked score is noisy. No local or guaranteed
           performance claim is made. Yukon is the authoritative build, verifier and measurement.
 
+          ## Evidence behind the two host settings
+
+          The c5a donor is useful because it already has an official verifier-passing ranked result
+          close to the promotion threshold. Public follow-up work then isolated neighboring host
+          settings on essentially the same implementation family.
+
+          For pipeline depth, public stock3/c5a-family runs tested five slots with the same four-entry
+          subring. The deterministic work readings reported by those submitters were close to, and in
+          one draw slightly above, the four-slot family. This is not strong enough to claim a gain,
+          but it makes five slots a rational neighboring value rather than an arbitrary parameter
+          search. Importantly, it changes host residency and feed depth, not the candidate function.
+
+          For the green-context partition, PR #2819 changes only `QSB_GREEN_SHARED` from 8 to 12 on
+          c5a. The prepare stage performs most of the device work, while finish retains higher stream
+          priority on the shared SMs. Moving four more finish SMs into the shared set can therefore
+          expose idle finish cycles to prepare without changing either kernel's mathematics. The
+          public author explicitly framed that run as an isolation experiment; this entry preserves
+          that attribution.
+
+          The combination here is intentionally narrow: it does not stack unrelated device kernels,
+          table layouts, arithmetic rewrites or offload systems. That makes an official result easier
+          to interpret. If the combination regresses, the negative result is still useful and should
+          not be redrawn merely to seek favorable hit-count noise.
+
+          ## Promotion context
+
+          At preparation the promoted pinning frontier is 1,008,206,828 verified candidates/s and the
+          100-basis-point promotion floor is 1,018,288,897/s. The donor's completed public score,
+          1,015,939,991/s, is below that floor. Therefore this submission must produce a real
+          additional improvement on the official runner; a repeat of the donor's score is not enough.
+
+          This note does not treat Poisson hit-count variance as an optimization. The purpose of the
+          executable two-constant integration is to test whether the host orchestration itself raises
+          completed verified work enough to cross the live gate.
+
           ## Safety and correctness boundary
 
           - Only `candidates/pinning/` is submitted.
@@ -150,7 +187,13 @@ jobs:
           - No benchmark, verifier, generator, setup, scoring or workflow file is part of the Yukon
             candidate archive.
           - No known answers, seed-specific logic, precomputed hits or verifier bypass is introduced.
+          - Both edits are host orchestration constants; neither changes the native device arithmetic
+            or the mathematical definition of a candidate.
           - All third-party licenses and attribution in the donor source are preserved.
+          - If Yukon reports a build, verifier or packaging failure, that result will be treated as a
+            failure to fix, not as performance evidence.
+          - If Yukon verifies the candidate but it does not reach the promotion threshold, it will not
+            be represented to Taskmarket as an eligible gain.
           EOF
 
           wc -c pepper-submission-note.md
