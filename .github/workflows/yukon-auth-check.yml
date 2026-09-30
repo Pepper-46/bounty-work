@@ -36,10 +36,17 @@ jobs:
           yukon trace off
           yukon config --telemetry disabled
 
-      - name: Verify authenticated Yukon access without exposing data
+      - name: Clone linked benchmark workspace
         shell: bash
+        run: |
+          set -euo pipefail
+          yukon clone eigenlabs/quantum-safe-bitcoin-challenge/pinning qsb-pinning
+
+      - name: Verify authenticated Yukon access without exposing submission data
+        shell: bash
+        working-directory: qsb-pinning
         run: |
           set -euo pipefail
           yukon submissions --json >/tmp/yukon-submissions.json
           test -s /tmp/yukon-submissions.json
-          echo "Yukon authentication check succeeded."
+          echo "Yukon authentication and benchmark linkage succeeded."
