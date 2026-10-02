@@ -1,16 +1,20 @@
-# QSB pinning candidate — isolated QSB_GATHER_V4=1
+# QSB pinning candidate — QSB_GATHER_V4=1 — RETIRED BEFORE SUBMISSION
 
 Prepared: 2026-10-02
 
+## Status
+
+**RETIRED / compile-time invalid. Do not submit.**
+
 ## Base / frontier
 
-- Protected base observed on current Yukon submissions: `2f57d80b8877a9e63b6af220da913236886a7ce5`
+- Current protected base observed on Yukon submissions: `2f57d80b8877a9e63b6af220da913236886a7ce5`
 - Promoted pinning source remains DPZZxlz `0fe76103`, official score **1,020,930,406 verified candidates/s**
 - 100-bip promotion target: approximately **1,031,139,710/s**
 
-## Candidate
+## Candidate that was staged
 
-Single existing compile-time switch in `candidates/pinning/pinning.cu`:
+The proposed isolated switch was:
 
 ```diff
  #ifndef QSB_GATHER_V4
@@ -19,18 +23,24 @@ Single existing compile-time switch in `candidates/pinning/pinning.cu`:
  #endif
 ```
 
-No host scheduling, green-context geometry, verifier, benchmark, candidate enumeration, hit format, co-grinder policy, or unrelated device knob is changed.
+## Source audit result
 
-## Why this is staged rather than submitted immediately
+Inspection of the exact promoted source at `b59a947d5c4d0ac61d2b1136ffdd7b3362010434` found that the switch is intentionally guarded out:
 
-A fresh public-PR search on 2026-10-02 found no Yukon validation PR whose submission note names `QSB_GATHER_V4`. This makes it materially distinct from the already-scored dead ends we have retired.
+```c
+#if QSB_GATHER_V4
+#error "QSB_GATHER_V4: ld.global.v4.u64 is 256 bits; ptxas rejects vectors above 128 bits"
+#endif
+```
 
-However, several adjacent gather/device switches are currently being evaluated by other participants. In particular, `QSB_GATHER_EARLY=0` has already scored only 973,332,840/s and is retired. The existence of a different gather knob is not evidence that V4 is faster. Before spending a remote evaluation, inspect the exact implementation and any newly landed PRs to ensure this switch is not an alias/no-op and has not just been independently scored.
+The dormant branches attempt `ld.global...v4.u64`, a 256-bit PTX vector load. The source itself records why this path is disabled: ptxas rejects vectors above 128 bits. Therefore `QSB_GATHER_V4=1` is not an executable optimization candidate; it is a guaranteed compile-time failure.
 
-## Retired mechanisms that must not be folded into this candidate
+A fresh public-PR search found no scored Yukon submission specifically enabling this switch. That absence is now explained by the source guard and is not positive evidence.
 
-Do not combine this experiment with: SLOTS5+GREEN_SHARED12, GREEN18, GREEN_SHARED6, GREEN_S2_LEAST, GREEN_SPLIT_FLAGS=0, FEED_BLOCK=1, half-packets, CHAIN_ALU, phase-skew, FIN_IVFOLD+FIN_RASSOC, finish instruction-cut bundles, or GATHER_EARLY=0. Those mechanisms already have negative authoritative evidence.
+## Decision
 
-## Promotion discipline
+Do **not** spend a Yukon remote evaluation on this candidate. Retire it before submission. A future gather experiment must use legal PTX widths (for example multiple <=128-bit loads) and be a genuinely new implementation rather than merely enabling this kill switch.
 
-This file is a staging artifact, not a performance claim. If source inspection shows `QSB_GATHER_V4=1` is executable, exact, and changes the native carrier without violating the candidate contract, prepare a one-knob submission from the current protected base. If a public evaluator scores the same hypothesis first, ingest that result and retire or promote this candidate accordingly rather than duplicating it.
+## Other retired mechanisms
+
+Do not fold in already-negative mechanisms: SLOTS5+GREEN_SHARED12, GREEN18, GREEN_SHARED6, GREEN_S2_LEAST, GREEN_SPLIT_FLAGS=0, FEED_BLOCK=1, SUB_CUT, half-packets, CHAIN_ALU, phase-skew, FIN_IVFOLD+FIN_RASSOC, finish instruction-cut bundles, or GATHER_EARLY=0.
