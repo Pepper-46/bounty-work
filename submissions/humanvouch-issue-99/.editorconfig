@@ -1,0 +1,23 @@
+# HumanVouch — shared whitespace and encoding defaults.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{js,jsx,mjs,cjs,ts,tsx,vue,circom,json,jsonc,yaml,yml,css,scss,html}]
+indent_style = space
+indent_size = 2
+
+[*.rs]
+indent_style = space
+indent_size = 4
+
+[*.sh]
+indent_style = tab
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
