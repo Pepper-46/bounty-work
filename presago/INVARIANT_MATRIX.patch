@@ -1,0 +1,40 @@
+diff --git a/INVARIANT_MATRIX.md b/INVARIANT_MATRIX.md
+--- a/INVARIANT_MATRIX.md
++++ b/INVARIANT_MATRIX.md
+@@ -18,8 +18,7 @@
+ | `DISPUTE_WINDOW_SECS` | 604,800 (7 days) | Challenge window |
+ | `TTL_BUMP` | ~1 year | Storage TTL threshold |
+ | `TTL_HIGH` | ~2 years | Storage TTL extend |
+-| `WIN_TOKENS` | 1 PULSE | Winner reward |
+-| `LOSE_TOKENS` | 0.2 PULSE | Loser reward |
++| `WIN_TOKENS` | 10 PULSE (100,000,000 base units at 7 decimals) | Winner reward |
+ | `WIN_POINTS` | 30 | Winner points |
+ | `LOSE_POINTS` | 10 | Loser points |
+ 
+@@ -44,7 +43,7 @@
+ | 1 | AccumulatedFees | Σ(MarketFees) + LegacyFees | Cached sum never drifts | `test_inv_accumulator_equals_ledger_sum` |
+ | 2 | cancel_market | MarketFees | Cancel reclaims exact market fees | `test_inv_cancel_reclaims_exact_market_fees` |
+ | 3 | MAX_WITHDRAWAL_BPS (20%) | AccumulatedFees | Single withdraw cannot drain all | `test_inv_withdraw_cap_after_cancel` |
+-| 4 | WIN_TOKENS + LOSE_TOKENS | total_supply | PULSE supply tracks rewards exactly | `test_inv_pulse_supply_tracks_rewards` |
++| 4 | WIN_TOKENS | total_supply | PULSE supply tracks winner reward mints (no loser consolation mint) | `test_inv_pulse_supply_tracks_rewards` |
+ | 5 | TTL_BUMP (~1yr) | DISPUTE_WINDOW (7d) | Market TTL outlives duration + dispute | `test_inv_market_ttl_outlives_duration` |
+ | 6 | cancel_market | withdraw_fees | Fee conservation: total = withdrawn + reclaimed + remaining | `test_inv_fee_conservation` |
+ | 7 | WIN_POINTS + LOSE_POINTS | leaderboard | Points conserved across win/loss/bonus | `test_inv_leaderboard_points_conservation` |
+@@ -55,7 +54,7 @@
+ | 12 | MAX_WITHDRAWAL_BPS (20%) | cancel_market reclaim | No over-drain on interleaved ops | `test_inv_cancel_then_withdraw_no_overdrain` |
+ | 13 | cancel_market | withdraw_fees cap | Multi-cancel safety | `test_inv_multiple_cancels_then_withdraw` |
+ | 14 | PLATFORM_FEE_BPS (1.5%) | referral_fee (0.5%) | Fee split preserves accumulator | `test_inv_fee_split_conservation` |
+-| 15 | WIN_TOKENS (1 PULSE) | MAX_TOP_PLAYERS (50) | Minting bounded per claim | `test_inv_reward_minting_bounded` |
++| 15 | WIN_TOKENS (10 PULSE = 100,000,000 base units) | MAX_TOP_PLAYERS (50) | Minting bounded per claim | `test_inv_reward_minting_bounded` |
+ | 16 | Referral depth (5) | cancel_market reclaim | Deep chains don't wipe accumulator | `test_inv_referral_depth_does_not_affect_accumulator` |
+ | 17 | MAX_WITHDRAWAL_BPS | market count | Cap scales correctly | `test_inv_withdraw_cap_scales_with_market_count` |
+ 
+@@ -71,7 +70,7 @@
+ 3. **Fee Testing**: Changes to `TOTAL_FEE_BPS`, `PLATFORM_FEE_BPS`, or
+    `MAX_WITHDRAWAL_BPS` require testing cancel + withdraw interleaving.
+ 
+-4. **Reward Testing**: Changes to `WIN_TOKENS`, `LOSE_TOKENS`, or
++4. **Reward Testing**: Changes to `WIN_TOKENS` or
+    `MAX_TOP_PLAYERS` require testing minting cap invariants.
+ 
+ 5. **Referral Testing**: Changes to `MAX_REFERRAL_DEPTH` require testing
