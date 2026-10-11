@@ -82,3 +82,15 @@ Material design, implementation, documentation and positioning were generated wi
 - [ ] Enter correct team and contact details supplied by owner.
 - [ ] Submit in Colosseum AND Superteam Earn before their deadlines.
 - [ ] Save both confirmation IDs / URLs; no submission may be claimed until these exist.
+
+## Verified project submission assets (2026-10-11)
+
+- Colosseum project (draft, **NOT finally submitted**): https://colosseum.com/arena/projects/cobrosol (project #17045; account Peppers, registered for Crypto World's Fair).
+- Live public app: https://pepper-46.github.io/bounty-work/
+- Browser-captured walkthrough video (**not a live payment**): https://pepper-46.github.io/bounty-work/assets/cobrosol-devnet-walkthrough.mp4
+- GitHub Actions successful recording and publication: https://github.com/Pepper-46/bounty-work/actions/runs/38172618148
+- Project mark SVG: https://pepper-46.github.io/bounty-work/assets/cobrosol-mark.svg
+- User-provided Telegram: @HTMLADMINS (saved by Colosseum as `htmladmins`).
+- Known platform constraint: Colosseum requests YouTube/Loom/Vimeo links for demo/pitch video; direct MP4 link is not a substitute.
+- Superteam Earn: user authentication via Google/email required, no GitHub option; additional submission **NOT done**.
+
