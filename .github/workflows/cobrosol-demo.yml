@@ -1,0 +1,53 @@
+name: CobroSol truthful demo recording
+
+on:
+  push:
+    branches:
+      - hackathon/cobrosol-20261011
+    paths:
+      - .github/workflows/cobrosol-demo.yml
+      - tools/record_devnet_walkthrough.py
+      - index.html
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cobrosol-video-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  record-browser-demo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install browser
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Record honest demo (no transfer)
+        run: python tools/record_devnet_walkthrough.py
+      - name: Keep downloadable demo artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobrosol-devnet-demo
+          path: assets/cobrosol-devnet-walkthrough.mp4
+          retention-days: 30
+      - name: Publish video to GitHub Pages source branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/cobrosol-devnet-walkthrough.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(cobrosol): publish real UI walkthrough (no funds)"
+            git push origin HEAD:hackathon/cobrosol-20261011
+          else
+            echo "No binary change to publish"
+          fi
