@@ -47,6 +47,8 @@ jobs:
           git add assets/cobrosol-devnet-walkthrough.mp4
           if ! git diff --cached --quiet; then
             git commit -m "docs(cobrosol): publish real UI walkthrough (no funds)"
+            git fetch origin hackathon/cobrosol-20261011
+            git rebase origin/hackathon/cobrosol-20261011
             git push origin HEAD:hackathon/cobrosol-20261011
           else
             echo "No binary change to publish"
