@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">CobroSol</title><desc id="desc">Mint circular verified payment mark on a dark green square</desc>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#B4FFC9"/><stop offset="1" stop-color="#73DDA7"/></linearGradient></defs>
+<rect width="512" height="512" rx="112" fill="#0B2118"/>
+<rect x="13" y="13" width="486" height="486" rx="104" fill="none" stroke="#356B50" stroke-width="11"/>
+<circle cx="256" cy="232" r="119" fill="#133D2D" stroke="url(#g)" stroke-width="19"/>
+<path d="M194 234 L239 278 L322 190" fill="none" stroke="url(#g)" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="256" cy="232" r="153" fill="none" stroke="#275B41" stroke-width="5" stroke-dasharray="9 18"/>
+<text x="256" y="433" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="44" font-weight="800" fill="#C2FFCF" letter-spacing="6">COBROSOL</text>
+</svg>
