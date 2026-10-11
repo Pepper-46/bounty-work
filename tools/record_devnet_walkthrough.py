@@ -9,6 +9,7 @@ import subprocess
 import sys
 import time
 from playwright.sync_api import sync_playwright
+import imageio_ffmpeg
 
 ROOT = Path(__file__).resolve().parents[1]
 CAPTURE = ROOT / ".capture"
@@ -67,7 +68,7 @@ try:
         context.close()
         browser.close()
     cmd = [
-        "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+        imageio_ffmpeg.get_ffmpeg_exe(), "-hide_banner", "-loglevel", "error", "-y",
         "-i", str(CAPTURE / "walkthrough.webm"),
         "-vf", "fps=18,scale=1280:720:flags=lanczos",
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "29",

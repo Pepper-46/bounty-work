@@ -30,7 +30,7 @@ jobs:
           python-version: '3.11'
       - name: Install browser
         run: |
-          python -m pip install --disable-pip-version-check playwright==1.55.0
+          python -m pip install --disable-pip-version-check playwright==1.55.0 imageio-ffmpeg==0.6.0
           python -m playwright install --with-deps chromium
       - name: Record honest demo (no transfer)
         run: python tools/record_devnet_walkthrough.py
