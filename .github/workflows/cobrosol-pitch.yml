@@ -1,0 +1,55 @@
+name: CobroSol pitch and logo assets
+
+on:
+  push:
+    branches:
+      - hackathon/cobrosol-20261011
+    paths:
+      - tools/build_pitch_assets.py
+      - .github/workflows/cobrosol-pitch.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cobrosol-pitch-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install video render dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq espeak ffmpeg
+          python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Render truthful project pitch and rasterized logo
+        run: python tools/build_pitch_assets.py
+      - name: Archive published assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobrosol-submission-pitch-logo
+          path: |
+            assets/cobrosol-logo.png
+            assets/cobrosol-hackathon-pitch.mp4
+          retention-days: 30
+      - name: Publish files on GitHub Pages branch safely
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/cobrosol-logo.png assets/cobrosol-hackathon-pitch.mp4
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(cobrosol): publish honest AI-narrated pitch and PNG logo"
+            git fetch origin hackathon/cobrosol-20261011
+            git rebase origin/hackathon/cobrosol-20261011
+            git push origin HEAD:hackathon/cobrosol-20261011
+          else
+            echo "No file changes"
+          fi
